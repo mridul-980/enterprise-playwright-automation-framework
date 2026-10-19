@@ -1,12 +1,13 @@
 
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../../src/pages/LoginPage';
+import { validUser, invalidUser } from '../../../test-data/credentials';
 
 test('TC_001 - Login with valid credentials', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigateTo('/');
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(validUser.username, validUser.password);
 
   await expect(page).toHaveURL(/inventory.html/);
   await expect(
@@ -19,14 +20,14 @@ const invalidLoginCases = [
   {
     testId: 'TC_002',
     scenario: 'invalid username',
-    username: 'invalid_user',
-    password: 'secret_sauce',
+    username: invalidUser.username,
+    password: invalidUser.password,
     expectedError: 'Epic sadface: Username and password do not match any user in this service',
   },
   {
     testId: 'TC_003',
     scenario: 'invalid password',
-    username: 'standard_user',
+    username: validUser.username,
     password: 'wrong_password',
     expectedError: 'Epic sadface: Username and password do not match any user in this service',
   },
