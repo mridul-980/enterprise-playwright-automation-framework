@@ -18,6 +18,9 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
 
     steps:
       - uses: actions/checkout@v7
@@ -31,9 +34,6 @@ jobs:
 
       - name: TypeScript Type Check
         run: npm run typecheck
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
 
       - name: Run Playwright Tests
         run: npx playwright test
