@@ -1,4 +1,9 @@
 import { test, expect } from '../../../src/fixtures/testFixtures';
+import { validUser } from '../../../test-data/credentials';
+import {
+  checkoutUser,
+  checkoutProduct,
+} from '../../../test-data/checkoutData';
 
 test('TC_012 - Navigate from cart to checkout', async ({
   page,
@@ -8,7 +13,7 @@ test('TC_012 - Navigate from cart to checkout', async ({
   checkoutPage,
 }) => {
   await loginPage.navigateTo('/');
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(validUser.username, validUser.password);
 
   await inventoryPage.addBackpackToCart();
   await page.locator('.shopping_cart_link').click();
@@ -31,24 +36,24 @@ test('TC_013 - Submit checkout information with valid details', async ({
   checkoutPage,
 }) => {
   await loginPage.navigateTo('/');
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(validUser.username, validUser.password);
 
   await inventoryPage.addBackpackToCart();
   await page.locator('.shopping_cart_link').click();
   await cartPage.checkoutButton.click();
 
   await checkoutPage.enterCheckoutInformation(
-    'Mridul',
-    'Tripathi',
-    '226001'
+      checkoutUser.firstName,
+      checkoutUser.lastName,
+      checkoutUser.postalCode
   );
   await checkoutPage.continueToOverview();
 
   await expect(page).toHaveURL(/checkout-step-two\.html/);
   await expect(
-    page.getByText('Sauce Labs Backpack', { exact: true })
-  ).toBeVisible();
-  await expect(page.getByText('Item total: $29.99')).toBeVisible();
+  page.getByText(checkoutProduct.name, { exact: true })
+).toBeVisible();
+  await expect(page.getByText(`Item total: ${checkoutProduct.itemTotal}`)).toBeVisible();
 });
 
 test('TC_014 - Complete purchase and verify order confirmation', async ({
@@ -59,21 +64,22 @@ test('TC_014 - Complete purchase and verify order confirmation', async ({
   checkoutPage,
 }) => {
   await loginPage.navigateTo('/');
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(validUser.username, validUser.password);
 
   await inventoryPage.addBackpackToCart();
   await page.locator('.shopping_cart_link').click();
   await cartPage.checkoutButton.click();
 
   await checkoutPage.enterCheckoutInformation(
-    'Mridul',
-    'Tripathi',
-    '226001'
+     checkoutUser.firstName,
+     checkoutUser.lastName,
+     checkoutUser.postalCode
   );
   await checkoutPage.continueToOverview();
 
   await expect(page).toHaveURL(/checkout-step-two\.html/);
-  await expect(page.getByText('Item total: $29.99')).toBeVisible();
+  await expect(page.getByText(checkoutProduct.name, { exact: true })).toBeVisible();
+  await expect(page.getByText(`Item total: ${checkoutProduct.itemTotal}`)).toBeVisible();
 
   await checkoutPage.finishCheckout();
 

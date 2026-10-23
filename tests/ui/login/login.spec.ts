@@ -47,13 +47,10 @@ for (const testCase of invalidLoginCases) {
     await loginPage.navigateTo('/');
     await loginPage.login(testCase.username, testCase.password);
 
-    await expect(loginPage.getErrorMessage()).toHaveText(
-  testCase.expectedError
-);
-    await expect(loginPage.getErrorMessage()).toBeVisible();
-    await expect(loginPage.getErrorMessage()).toHaveText(
-      testCase.expectedError
-    );
+  const errorMessage = loginPage.getErrorMessage();
+
+await expect(errorMessage).toBeVisible();
+await expect(errorMessage).toHaveText(testCase.expectedError);
   });
 }
 
