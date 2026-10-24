@@ -87,3 +87,93 @@ test('TC_014 - Complete purchase and verify order confirmation', async ({
   await expect(checkoutPage.confirmationMessage).toBeVisible();
   await expect(checkoutPage.backHomeButton).toBeVisible();
 });
+
+test('TC_015 - Checkout with missing first name', async ({
+  loginPage,
+  inventoryPage,
+  cartPage,
+  checkoutPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login(
+    validUser.username,
+    validUser.password
+  );
+
+  await inventoryPage.addBackpackToCart();
+  await cartPage.navigateTo('/cart.html');
+  await cartPage.checkoutButton.click();
+
+  await checkoutPage.enterCheckoutInformation(
+    '',
+    'Tripathi',
+    '226001'
+  );
+
+  await checkoutPage.continueToOverview();
+
+  await expect(checkoutPage.getErrorMessage()).toBeVisible();
+  await expect(checkoutPage.getErrorMessage()).toHaveText(
+    'Error: First Name is required'
+  );
+});
+
+test('TC_016 - Checkout with missing last name', async ({
+  loginPage,
+  inventoryPage,
+  cartPage,
+  checkoutPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login(
+    validUser.username,
+    validUser.password
+  );
+
+  await inventoryPage.addBackpackToCart();
+  await cartPage.navigateTo('/cart.html');
+  await cartPage.checkoutButton.click();
+
+  await checkoutPage.enterCheckoutInformation(
+    'Mridul',
+    '',
+    '226001'
+  );
+
+  await checkoutPage.continueToOverview();
+
+  await expect(checkoutPage.getErrorMessage()).toBeVisible();
+  await expect(checkoutPage.getErrorMessage()).toHaveText(
+    'Error: Last Name is required'
+  );
+});
+
+test('TC_017 - Checkout with missing postal code', async ({
+  loginPage,
+  inventoryPage,
+  cartPage,
+  checkoutPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login(
+    validUser.username,
+    validUser.password
+  );
+
+  await inventoryPage.addBackpackToCart();
+  await cartPage.navigateTo('/cart.html');
+  await cartPage.checkoutButton.click();
+
+  await checkoutPage.enterCheckoutInformation(
+    'Mridul',
+    'Tripathi',
+    ''
+  );
+
+  await checkoutPage.continueToOverview();
+
+  await expect(checkoutPage.getErrorMessage()).toBeVisible();
+  await expect(checkoutPage.getErrorMessage()).toHaveText(
+    'Error: Postal Code is required'
+  );
+});

@@ -10,6 +10,7 @@ export class CheckoutPage extends BasePage {
   readonly checkoutTitle: Locator;
   readonly confirmationMessage: Locator;
   readonly backHomeButton: Locator;
+  readonly errorMessage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,6 +34,7 @@ export class CheckoutPage extends BasePage {
   'Thank you for your order!',
   { exact: true }
 );
+this.errorMessage = page.locator('[data-test="error"]');
 
 this.backHomeButton = page.getByRole('button', {
   name: 'Back Home',
@@ -53,5 +55,8 @@ async continueToOverview(): Promise<void> {
 }
 async finishCheckout(): Promise<void> {
   await this.finishButton.click();
+}
+getErrorMessage(): Locator {
+  return this.errorMessage;
 }
 }
