@@ -8,7 +8,7 @@ export class CartPage extends BasePage {
   readonly continueShoppingButton: Locator;
   readonly backpackPrice: Locator;
   readonly backpackQuantity: Locator;
-
+  readonly bikeLightName: Locator;
   constructor(page: Page) {
     super(page);
 
@@ -32,6 +32,10 @@ export class CartPage extends BasePage {
     this.backpackQuantity = page.locator('.cart_item')
   .filter({ hasText: 'Sauce Labs Backpack' })
   .locator('.cart_quantity');
+
+    this.bikeLightName = page.getByText('Sauce Labs Bike Light', {
+      exact: true,
+    });
   }
   async removeBackpack(): Promise<void> {
   await this.page.locator('.cart_item')

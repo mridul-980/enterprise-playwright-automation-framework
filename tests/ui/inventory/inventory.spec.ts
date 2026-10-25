@@ -59,3 +59,24 @@ test('TC_008 - Remove a product from cart', async ({
   await expect(page.locator('.shopping_cart_badge')).toHaveCount(0);
   await expect(inventoryPage.backpackAddToCartButton).toBeVisible();
 });
+
+test('TC_018 - Add multiple products and verify cart contents', async ({
+  page,
+  loginPage,
+  inventoryPage,
+  cartPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login('standard_user', 'secret_sauce');
+
+  await inventoryPage.addBackpackToCart();
+  await inventoryPage.addBikeLightToCart();
+
+  await expect(page.locator('.shopping_cart_badge')).toHaveText('2');
+
+  await page.locator('.shopping_cart_link').click();
+
+  await expect(cartPage.cartItems).toHaveCount(2);
+  await expect(cartPage.backpackName).toBeVisible();
+  await expect(cartPage.bikeLightName).toBeVisible();
+});

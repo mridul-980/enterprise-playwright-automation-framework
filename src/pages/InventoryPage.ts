@@ -7,6 +7,8 @@ export class InventoryPage extends BasePage {
   readonly backpackName: Locator;
   readonly backpackPrice: Locator;
   readonly backpackAddToCartButton: Locator;
+  readonly bikeLightName: Locator;
+  readonly bikeLightAddToCartButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -28,14 +30,25 @@ export class InventoryPage extends BasePage {
     this.backpackAddToCartButton = page.locator('.inventory_item')
       .filter({ hasText: 'Sauce Labs Backpack' })
       .getByRole('button', { name: 'Add to cart' });
+
+    this.bikeLightName = page.getByText('Sauce Labs Bike Light', {
+      exact: true,
+});
+
+    this.bikeLightAddToCartButton = page.locator('.inventory_item')
+      .filter({ hasText: 'Sauce Labs Bike Light' })
+      .getByRole('button', { name: 'Add to cart' });
   }
   async addBackpackToCart(): Promise<void> {
   await this.backpackAddToCartButton.click();
 }
-async removeBackpackFromCart(): Promise<void> {
+  async removeBackpackFromCart(): Promise<void> {
   await this.page.locator('.inventory_item')
     .filter({ hasText: 'Sauce Labs Backpack' })
     .getByRole('button', { name: 'Remove' })
     .click();
+}
+async addBikeLightToCart(): Promise<void> {
+  await this.bikeLightAddToCartButton.click();
 }
 }
