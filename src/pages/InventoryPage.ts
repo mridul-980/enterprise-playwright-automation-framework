@@ -9,6 +9,9 @@ export class InventoryPage extends BasePage {
   readonly backpackAddToCartButton: Locator;
   readonly bikeLightName: Locator;
   readonly bikeLightAddToCartButton: Locator;
+  readonly sortDropdown: Locator;
+  readonly inventoryItemPrices: Locator;
+  readonly inventoryItemNames: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -38,6 +41,13 @@ export class InventoryPage extends BasePage {
     this.bikeLightAddToCartButton = page.locator('.inventory_item')
       .filter({ hasText: 'Sauce Labs Bike Light' })
       .getByRole('button', { name: 'Add to cart' });
+
+    this.sortDropdown = page.getByRole('combobox');
+
+    this.inventoryItemPrices = page.locator(
+      '.inventory_item_price'
+    );
+    this.inventoryItemNames = page.locator('.inventory_item_name');
   }
   async addBackpackToCart(): Promise<void> {
   await this.backpackAddToCartButton.click();
@@ -50,5 +60,8 @@ export class InventoryPage extends BasePage {
 }
 async addBikeLightToCart(): Promise<void> {
   await this.bikeLightAddToCartButton.click();
+}
+async sortProducts(option: string): Promise<void> {
+  await this.sortDropdown.selectOption({ label: option });
 }
 }

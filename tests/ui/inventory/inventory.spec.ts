@@ -80,3 +80,58 @@ test('TC_018 - Add multiple products and verify cart contents', async ({
   await expect(cartPage.backpackName).toBeVisible();
   await expect(cartPage.bikeLightName).toBeVisible();
 });
+
+test('TC_020 - Sort products by price low to high', async ({
+  loginPage,
+  inventoryPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login('standard_user', 'secret_sauce');
+
+  await inventoryPage.sortProducts('Price (low to high)');
+
+  const prices = await inventoryPage.inventoryItemPrices.allTextContents();
+  const numericPrices = prices.map(price =>
+    Number(price.replace('$', ''))
+  );
+
+  expect(numericPrices).toEqual(
+    [...numericPrices].sort((a, b) => a - b)
+  );
+});
+
+test('TC_021 - Sort products by price high to low', async ({
+  loginPage,
+  inventoryPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login('standard_user', 'secret_sauce');
+
+  await inventoryPage.sortProducts('Price (high to low)');
+
+  const prices = await inventoryPage.inventoryItemPrices.allTextContents();
+  const numericPrices = prices.map(price =>
+    Number(price.replace('$', ''))
+  );
+
+  expect(numericPrices).toEqual(
+    [...numericPrices].sort((a, b) => b - a)
+  );
+});
+
+test('TC_022 - Sort products by name A to Z', async ({
+  loginPage,
+  inventoryPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login('standard_user', 'secret_sauce');
+
+  await inventoryPage.sortProducts('Name (A to Z)');
+
+  const names = await inventoryPage.inventoryItemNames.allTextContents();
+
+  expect(names).toEqual(
+    [...names].sort((a, b) => a.localeCompare(b))
+  );
+});
+
