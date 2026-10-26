@@ -135,3 +135,40 @@ test('TC_022 - Sort products by name A to Z', async ({
   );
 });
 
+
+test('TC_023 - Sort products by name Z to A', async ({
+  loginPage,
+  inventoryPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login('standard_user', 'secret_sauce');
+
+  await inventoryPage.sortProducts('Name (Z to A)');
+
+  const names =
+    await inventoryPage.inventoryItemNames.allTextContents();
+
+  expect(names).toEqual(
+    [...names].sort((a, b) => b.localeCompare(a))
+  );
+});
+
+test('TC_024 - Sorting inventory preserves cart state', async ({
+  page,
+  loginPage,
+  inventoryPage,
+  cartPage,
+}) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login('standard_user', 'secret_sauce');
+
+  await inventoryPage.addBackpackToCart();
+  await inventoryPage.sortProducts('Price (low to high)');
+
+  await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
+
+  await page.locator('.shopping_cart_link').click();
+
+  await expect(cartPage.cartItems).toHaveCount(1);
+  await expect(cartPage.backpackName).toBeVisible();
+});
