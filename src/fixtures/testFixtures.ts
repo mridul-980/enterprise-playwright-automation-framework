@@ -9,6 +9,7 @@ type PageFixtures = {
   inventoryPage: InventoryPage;
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
+  loggedIn: void;
 };
 
 export const test = base.extend<PageFixtures>({
@@ -27,6 +28,16 @@ export const test = base.extend<PageFixtures>({
   checkoutPage: async ({ page }, use) => {
     await use(new CheckoutPage(page));
   },
+
+  loggedIn: async ({ loginPage }, use) => {
+  await loginPage.navigateTo('/');
+  await loginPage.login(
+    'standard_user',
+    'secret_sauce'
+  );
+
+  await use();
+},
 });
 
 export { expect } from '@playwright/test';

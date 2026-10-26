@@ -7,13 +7,11 @@ import {
 
 test('TC_012 - Navigate from cart to checkout', async ({
   page,
-  loginPage,
   inventoryPage,
   cartPage,
   checkoutPage,
+  loggedIn,
 }) => {
-  await loginPage.navigateTo('/');
-  await loginPage.login(validUser.username, validUser.password);
 
   await inventoryPage.addBackpackToCart();
   await page.locator('.shopping_cart_link').click();
@@ -30,13 +28,11 @@ test('TC_012 - Navigate from cart to checkout', async ({
 
 test('TC_013 - Submit checkout information with valid details', async ({
   page,
-  loginPage,
+  loggedIn,
   inventoryPage,
   cartPage,
   checkoutPage,
 }) => {
-  await loginPage.navigateTo('/');
-  await loginPage.login(validUser.username, validUser.password);
 
   await inventoryPage.addBackpackToCart();
   await page.locator('.shopping_cart_link').click();
@@ -58,13 +54,11 @@ test('TC_013 - Submit checkout information with valid details', async ({
 
 test('TC_014 - Complete purchase and verify order confirmation', async ({
   page,
-  loginPage,
+  loggedIn,
   inventoryPage,
   cartPage,
   checkoutPage,
 }) => {
-  await loginPage.navigateTo('/');
-  await loginPage.login(validUser.username, validUser.password);
 
   await inventoryPage.addBackpackToCart();
   await page.locator('.shopping_cart_link').click();
@@ -89,16 +83,11 @@ test('TC_014 - Complete purchase and verify order confirmation', async ({
 });
 
 test('TC_015 - Checkout with missing first name', async ({
-  loginPage,
+  loggedIn,
   inventoryPage,
   cartPage,
   checkoutPage,
 }) => {
-  await loginPage.navigateTo('/');
-  await loginPage.login(
-    validUser.username,
-    validUser.password
-  );
 
   await inventoryPage.addBackpackToCart();
   await cartPage.navigateTo('/cart.html');
@@ -119,16 +108,11 @@ test('TC_015 - Checkout with missing first name', async ({
 });
 
 test('TC_016 - Checkout with missing last name', async ({
-  loginPage,
+  loggedIn,
   inventoryPage,
   cartPage,
   checkoutPage,
 }) => {
-  await loginPage.navigateTo('/');
-  await loginPage.login(
-    validUser.username,
-    validUser.password
-  );
 
   await inventoryPage.addBackpackToCart();
   await cartPage.navigateTo('/cart.html');
@@ -149,16 +133,11 @@ test('TC_016 - Checkout with missing last name', async ({
 });
 
 test('TC_017 - Checkout with missing postal code', async ({
-  loginPage,
+  loggedIn,
   inventoryPage,
   cartPage,
   checkoutPage,
 }) => {
-  await loginPage.navigateTo('/');
-  await loginPage.login(
-    validUser.username,
-    validUser.password
-  );
 
   await inventoryPage.addBackpackToCart();
   await cartPage.navigateTo('/cart.html');
