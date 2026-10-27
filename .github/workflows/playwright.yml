@@ -44,6 +44,95 @@ jobs:
       - name: Run Playwright Tests
         run: npx playwright test
 
+      - name: Publish Playwright Test Summary
+        if: always()
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const reportPath = 'playwright-report.json';
+          const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+
+          if (!fs.existsSync(reportPath)) {
+            fs.appendFileSync(
+              summaryPath,
+              '## Playwright Test Summary\n\nJSON report not found.\n'
+            );
+            process.exit(0);
+          }
+
+          const report = JSON.parse(
+            fs.readFileSync(reportPath, 'utf8')
+          );
+
+          const failures = [];
+
+          function visit(suite) {
+            for (const spec of suite.specs ?? []) {
+              for (const test of spec.tests ?? []) {
+                const results = test.results ?? [];
+                const finalResult = results[results.length - 1];
+
+                if (
+                  test.outcome === 'unexpected' ||
+                  ['failed', 'timedOut', 'interrupted'].includes(
+                    finalResult?.status
+                  )
+                ) {
+                  failures.push({
+                    title: spec.title,
+                    file: spec.file ?? suite.file ?? 'Unknown file',
+                    project: test.projectName ?? 'Unknown project',
+                    status: finalResult?.status ?? test.outcome,
+                    errors: finalResult?.errors ?? []
+                  });
+                }
+              }
+            }
+
+            for (const child of suite.suites ?? []) {
+              visit(child);
+            }
+          }
+
+          for (const suite of report.suites ?? []) {
+            visit(suite);
+          }
+
+          const stats = report.stats ?? {};
+
+          let summary = [
+            '## Playwright Test Summary',
+            '',
+            `- **Expected:** ${stats.expected ?? 'N/A'}`,
+            `- **Unexpected:** ${stats.unexpected ?? failures.length}`,
+            `- **Flaky:** ${stats.flaky ?? 0}`,
+            `- **Skipped:** ${stats.skipped ?? 0}`,
+            ''
+          ].join('\n');
+
+          if (failures.length > 0) {
+            summary += '### Failed Tests\n\n';
+
+            for (const failure of failures) {
+              summary +=
+                `- **${failure.title}** — ${failure.status}\n` +
+                `  - File: \`${failure.file}\`\n` +
+                `  - Browser/project: ${failure.project}\n`;
+
+              for (const error of failure.errors) {
+                summary += `  - Error: ${error.message ?? 'No error message'}\n`;
+              }
+
+              summary += '\n';
+            }
+          } else {
+            summary += 'All tests passed. No failing tests reported.\n';
+          }
+
+          fs.appendFileSync(summaryPath, summary + '\n');
+          NODE
+
       - name: Generate Allure Report
         if: always()
         run: |

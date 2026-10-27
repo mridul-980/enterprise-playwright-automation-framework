@@ -28,6 +28,7 @@ export default defineConfig({
   reporter: [
   ['html', { open: 'never' }],
   ['allure-playwright'],
+  ['json', { outputFile: 'playwright-report.json' }]
 ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 use: {
