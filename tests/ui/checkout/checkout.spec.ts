@@ -5,7 +5,7 @@ import {
   checkoutProduct,
 } from '../../../test-data/checkoutData';
 
-test('TC_012 - Navigate from cart to checkout', async ({
+test('TC_012 - Navigate from cart to checkout @regression', async ({
   page,
   inventoryPage,
   cartPage,
@@ -26,7 +26,7 @@ test('TC_012 - Navigate from cart to checkout', async ({
   await expect(checkoutPage.postalCodeInput).toBeVisible();
 });
 
-test('TC_013 - Submit checkout information with valid details', async ({
+test('TC_013 - Submit checkout information with valid details @regression', async ({
   page,
   loggedIn,
   inventoryPage,
@@ -52,7 +52,7 @@ test('TC_013 - Submit checkout information with valid details', async ({
   await expect(page.getByText(`Item total: ${checkoutProduct.itemTotal}`)).toBeVisible();
 });
 
-test('TC_014 - Complete purchase and verify order confirmation', async ({
+test('TC_014 - Complete purchase and verify order confirmation @smoke @regression', async ({
   page,
   loggedIn,
   inventoryPage,
@@ -82,7 +82,7 @@ test('TC_014 - Complete purchase and verify order confirmation', async ({
   await expect(checkoutPage.backHomeButton).toBeVisible();
 });
 
-test('TC_015 - Checkout with missing first name', async ({
+test('TC_015 - Checkout with missing first name @regression', async ({
   loggedIn,
   inventoryPage,
   cartPage,
@@ -107,7 +107,7 @@ test('TC_015 - Checkout with missing first name', async ({
   );
 });
 
-test('TC_016 - Checkout with missing last name', async ({
+test('TC_016 - Checkout with missing last name @regression', async ({
   loggedIn,
   inventoryPage,
   cartPage,
@@ -132,7 +132,7 @@ test('TC_016 - Checkout with missing last name', async ({
   );
 });
 
-test('TC_017 - Checkout with missing postal code', async ({
+test('TC_017 - Checkout with missing postal code @regression', async ({
   loggedIn,
   inventoryPage,
   cartPage,

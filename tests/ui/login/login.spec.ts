@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../../src/pages/LoginPage';
 import { validUser, invalidUser } from '../../../test-data/credentials';
 
-test('TC_001 - Login with valid credentials', async ({ page }) => {
+test('TC_001 - Login with valid credentials @smoke @regression', async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigateTo('/');
@@ -41,7 +41,7 @@ const invalidLoginCases = [
 ];
 
 for (const testCase of invalidLoginCases) {
-  test(`${testCase.testId} - Login with ${testCase.scenario}`, async ({ page }) => {
+  test(`${testCase.testId} - Login with ${testCase.scenario} @regression`, async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.navigateTo('/');

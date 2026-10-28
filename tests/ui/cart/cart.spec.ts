@@ -1,6 +1,6 @@
 import { test, expect } from '../../../src/fixtures/testFixtures';
 
-test('TC_009 - Verify cart contents after adding a product', async ({
+test('TC_009 - Verify cart contents after adding a product @regression', async ({
   page,
   inventoryPage,
   cartPage,
@@ -15,7 +15,7 @@ test('TC_009 - Verify cart contents after adding a product', async ({
   await expect(cartPage.checkoutButton).toBeVisible();
 });
 
-test('TC_010 - Verify product details and price in cart', async ({
+test('TC_010 - Verify product details and price in cart @regression', async ({
   page,
   inventoryPage,
   cartPage,
@@ -29,7 +29,7 @@ test('TC_010 - Verify product details and price in cart', async ({
   await expect(cartPage.backpackQuantity).toHaveText('1');
 });
 
-test('TC_011 - Remove a product directly from cart', async ({
+test('TC_011 - Remove a product directly from cart @regression', async ({
   page,
   loggedIn,
   inventoryPage,
@@ -47,7 +47,7 @@ test('TC_011 - Remove a product directly from cart', async ({
   await expect(cartPage.checkoutButton).toBeVisible();
 });
 
-test('TC_019 - Remove one product from a cart with multiple products', async ({
+test('TC_019 - Remove one product from a cart with multiple products @regression', async ({
   page,
   loggedIn,
   inventoryPage,

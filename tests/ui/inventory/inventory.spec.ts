@@ -1,6 +1,6 @@
 import { test, expect } from '../../../src/fixtures/testFixtures';
 
-test('TC_005 - Verify inventory page after successful login', async ({
+test('TC_005 - Verify inventory page after successful login @smoke @regression', async ({
   page,
   loginPage,
   inventoryPage,
@@ -14,7 +14,7 @@ test('TC_005 - Verify inventory page after successful login', async ({
   await expect(inventoryPage.inventoryItems).toHaveCount(6);
 });
 
-test('TC_006 - Verify product details on inventory page', async ({
+test('TC_006 - Verify product details on inventory page @regression', async ({
   page,
   loginPage,
   inventoryPage,
@@ -27,7 +27,7 @@ test('TC_006 - Verify product details on inventory page', async ({
   await expect(inventoryPage.backpackAddToCartButton).toBeVisible();
 });
 
-test('TC_007 - Add a product to cart and verify cart badge', async ({
+test('TC_007 - Add a product to cart and verify cart badge @smoke @regression', async ({
   page,
   loginPage,
   inventoryPage,
@@ -43,7 +43,7 @@ test('TC_007 - Add a product to cart and verify cart badge', async ({
   ).toBeVisible();
 });
 
-test('TC_008 - Remove a product from cart', async ({
+test('TC_008 - Remove a product from cart @regression', async ({
   page,
   loginPage,
   inventoryPage,
@@ -60,7 +60,7 @@ test('TC_008 - Remove a product from cart', async ({
   await expect(inventoryPage.backpackAddToCartButton).toBeVisible();
 });
 
-test('TC_018 - Add multiple products and verify cart contents', async ({
+test('TC_018 - Add multiple products and verify cart contents @regression', async ({
   page,
   loginPage,
   inventoryPage,
@@ -81,7 +81,7 @@ test('TC_018 - Add multiple products and verify cart contents', async ({
   await expect(cartPage.bikeLightName).toBeVisible();
 });
 
-test('TC_020 - Sort products by price low to high', async ({
+test('TC_020 - Sort products by price low to high @regression', async ({
   loginPage,
   inventoryPage,
 }) => {
@@ -100,7 +100,7 @@ test('TC_020 - Sort products by price low to high', async ({
   );
 });
 
-test('TC_021 - Sort products by price high to low', async ({
+test('TC_021 - Sort products by price high to low @regression', async ({
   loginPage,
   inventoryPage,
 }) => {
@@ -119,7 +119,7 @@ test('TC_021 - Sort products by price high to low', async ({
   );
 });
 
-test('TC_022 - Sort products by name A to Z', async ({
+test('TC_022 - Sort products by name A to Z @regression', async ({
   loginPage,
   inventoryPage,
 }) => {
@@ -136,7 +136,7 @@ test('TC_022 - Sort products by name A to Z', async ({
 });
 
 
-test('TC_023 - Sort products by name Z to A', async ({
+test('TC_023 - Sort products by name Z to A @regression', async ({
   loginPage,
   inventoryPage,
 }) => {
@@ -153,7 +153,7 @@ test('TC_023 - Sort products by name Z to A', async ({
   );
 });
 
-test('TC_024 - Sorting inventory preserves cart state', async ({
+test('TC_024 - Sorting inventory preserves cart state @regression', async ({
   page,
   loginPage,
   inventoryPage,

@@ -21,6 +21,8 @@
     "report:playwright": "playwright show-report",
     "report:allure:generate": "allure generate allure-results --clean -o allure-report",
     "report:allure:open": "allure open allure-report",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:smoke": "playwright test --grep \"@smoke\"",
+    "test:regression": "playwright test --grep \"@regression\""
   }
 }
