@@ -30,4 +30,7 @@ export const environment = {
   name: environmentName,
   baseURL:
     process.env.BASE_URL ?? environments[environmentName],
+  apiBaseURL:
+    process.env.API_BASE_URL ??
+    `https://jsonplaceholder.typicode.com`,
 };

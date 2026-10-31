@@ -10,8 +10,9 @@
     "noEmit": true
   },
   "include": [
-  "playwright.config.ts",
-  "tests/**/*.ts",
-  "test-data/**/*.ts"
+    "playwright.config.ts",
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "test-data/**/*.ts"
 ]
 }

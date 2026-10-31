@@ -48,12 +48,22 @@ use: {
   projects: [
     {
       name: 'chromium',
+      testMatch: '**/ui/**/*.spec.ts',
       use: { ...devices['Desktop Chrome'] },
     },
 
     {
       name: 'firefox',
+      testMatch: '**/ui/**/*.spec.ts',
       use: { ...devices['Desktop Firefox'] },
+    },
+
+    {
+      name: 'api',
+      testMatch: '**/api/**/*.spec.ts',
+      use: {
+        baseURL: environment.apiBaseURL,
+      }
     }
 
     /* Test against mobile viewports. */
