@@ -2,11 +2,12 @@
 import { test, expect } from '@playwright/test';
 import { validateSchema } from '../../../src/api/helpers/schemaValidator';
 import { userSchema } from '../../../src/api/schemas/user.schema';
-
+import { UserApiClient } from '../../../src/api/clients/userApiClient';
 
 test('API_001 - Get user by ID', async ({ request }) => {
+  const userApi = new UserApiClient(request);
 
-  const response = await request.get('/users/1');
+  const response = await userApi.getUser(1);
   expect(response.status()).toBe(200);
 
   const responseBody: unknown = await response.json();
@@ -24,17 +25,14 @@ test('API_001 - Get user by ID', async ({ request }) => {
 
 
 test('API_002 - Create a new user', async ({ request }) => {
+  const userApi = new UserApiClient(request);
+  const userData = {
+    name: 'Mridul Tripathi',
+    username: 'mridul',
+    email: 'mridul@example.com',
+  };
 
-  const response = await request.post(
-    '/users',
-    {
-      data: {
-        name: 'Mridul Tripathi',
-        username: 'mridul',
-        email: 'mridul@example.com',
-      },
-    }
-  );
+  const response = await userApi.createUser(userData);
 
   expect(response.status()).toBe(201);
 
@@ -48,16 +46,11 @@ test('API_002 - Create a new user', async ({ request }) => {
 
 
 test('API_003 - Update an existing user', async ({ request }) => {
-
-  const response = await request.put(
-    '/users/1',
-    {
-      data: {
-        name: 'Mridul Updated',
-        email: 'mridul.updated@example.com',
-      },
-    }
-  );
+  const userApi = new UserApiClient(request);
+  const response = await userApi.updateUser(1, {
+    name: 'Mridul Updated',
+    email: 'mridul.updated@example.com',
+  });
 
   expect(response.status()).toBe(200);
 
@@ -70,28 +63,25 @@ test('API_003 - Update an existing user', async ({ request }) => {
 
 
 test('API_004 - Delete an existing user', async ({ request }) => {
+  const userApi = new UserApiClient(request);
 
-  const response = await request.delete(
-    '/users/1'
-  );
+  const response = await userApi.deleteUser(1);
 
   expect(response.status()).toBe(200);
 });
 
 test('API_005 - Verify response for non-existent user', async ({ request }) => {
+  const userApi = new UserApiClient(request);
 
-  const response = await request.get(
-    '/users/9999'
-  );
+  const response = await userApi.getUser(9999);
 
   expect(response.status()).toBe(404);
 });
 
 test('API_006 - Verify response content type', async ({ request }) => {
+  const userApi = new UserApiClient(request);
 
-  const response = await request.get(
-    '/users/1'
-  );
+  const response = await userApi.getUser(1);
 
   expect(response.status()).toBe(200);
 
