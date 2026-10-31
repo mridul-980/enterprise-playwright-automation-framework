@@ -3,7 +3,8 @@ import { test, expect } from '@playwright/test';
 import { validateSchema } from '../../../src/api/helpers/schemaValidator';
 import { userSchema } from '../../../src/api/schemas/user.schema';
 import { UserApiClient } from '../../../src/api/clients/userApiClient';
-
+import { newUserData, updatedUserData } from '../../../test-data/api/userTestData';
+import { createdUserSchema } from '../../../src/api/schemas/createdUser.schema';
 test('API_001 - Get user by ID', async ({ request }) => {
   const userApi = new UserApiClient(request);
 
@@ -26,39 +27,31 @@ test('API_001 - Get user by ID', async ({ request }) => {
 
 test('API_002 - Create a new user', async ({ request }) => {
   const userApi = new UserApiClient(request);
-  const userData = {
-    name: 'Mridul Tripathi',
-    username: 'mridul',
-    email: 'mridul@example.com',
-  };
-
-  const response = await userApi.createUser(userData);
+  const response = await userApi.createUser(newUserData);
 
   expect(response.status()).toBe(201);
 
   const responseBody = await response.json();
+  validateSchema(createdUserSchema, responseBody);
 
   expect(responseBody.id).toBeTruthy();
-  expect(responseBody.name).toBe('Mridul Tripathi');
-  expect(responseBody.username).toBe('mridul');
-  expect(responseBody.email).toBe('mridul@example.com');
+  expect(responseBody.name).toBe(newUserData.name);
+  expect(responseBody.username).toBe(newUserData.username);
+  expect(responseBody.email).toBe(newUserData.email);
 });
 
 
 test('API_003 - Update an existing user', async ({ request }) => {
   const userApi = new UserApiClient(request);
-  const response = await userApi.updateUser(1, {
-    name: 'Mridul Updated',
-    email: 'mridul.updated@example.com',
-  });
+  const response = await userApi.updateUser(1, updatedUserData);
 
   expect(response.status()).toBe(200);
 
   const responseBody = await response.json();
 
   expect(responseBody.id).toBe(1);
-  expect(responseBody.name).toBe('Mridul Updated');
-  expect(responseBody.email).toBe('mridul.updated@example.com');
+  expect(responseBody.name).toBe(updatedUserData.name);
+  expect(responseBody.email).toBe(updatedUserData.email);
 });
 
 

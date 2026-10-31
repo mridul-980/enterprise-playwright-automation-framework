@@ -118,7 +118,7 @@ jobs:
               summary +=
                 `- **${failure.title}** — ${failure.status}\n` +
                 `  - File: \`${failure.file}\`\n` +
-                `  - Browser/project: ${failure.project}\n`;
+                `  - Project: ${failure.project}\n`;
 
               for (const error of failure.errors) {
                 summary += `  - Error: ${error.message ?? 'No error message'}\n`;
