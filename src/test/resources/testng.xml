@@ -4,6 +4,7 @@
     <test name="Smoke Test">
         <classes>
             <class name="tests.base.MavenTestNgSmokeTest"/>
+            <class name="tests.ui.LoginTest"/>
         </classes>
     </test>
 </suite>
