@@ -46,6 +46,14 @@ public final class ConfigReader {
                 .or(() -> environmentVariable("BASE_URL"));
     }
 
+    public Optional<String> apiBaseUrl(String environmentName) {
+        String environmentVariable = "API_BASE_URL_" + environmentName.toUpperCase(Locale.ROOT);
+        return property("apiBaseUrl." + environmentName)
+                .or(() -> property("apiBaseUrl"))
+                .or(() -> environmentVariable(environmentVariable))
+                .or(() -> environmentVariable("API_BASE_URL"));
+    }
+
     private Optional<String> value(String propertyName, String environmentVariable) {
         return property(propertyName).or(() -> environmentVariable(environmentVariable));
     }

@@ -7,6 +7,7 @@
             <class name="tests.ui.LoginTest"/>
             <class name="tests.ui.InventoryTest"/>
             <class name="tests.ui.CheckoutTest"/>
+            <class name="tests.api.JsonPlaceholderApiTest"/>
         </classes>
     </test>
 </suite>
