@@ -65,6 +65,91 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         }
     }
 
+    @Test(description = "TC_016 - Replace a post with PUT")
+    public void updatePostReplacesPostFields() throws Exception {
+        Map<String, Object> updatedPost = Map.of(
+                "id", 1,
+                "userId", 1,
+                "title", "M7 PUT update",
+                "body", "Updated post body using PUT.");
+        JsonPlaceholderApiClient client =
+                new JsonPlaceholderApiClient(getApiTestContext().apiRequestContext());
+        APIResponse response = client.updatePost(1, updatedPost);
+
+        try {
+            Assert.assertEquals(response.status(), 200, "PUT /posts/1 should return HTTP 200.");
+            JsonNode post = parseAndValidatePost(response.text());
+
+            Assert.assertEquals(post.path("id").asInt(), updatedPost.get("id"));
+            Assert.assertEquals(post.path("userId").asInt(), updatedPost.get("userId"));
+            Assert.assertEquals(post.path("title").asText(), updatedPost.get("title"));
+            Assert.assertEquals(post.path("body").asText(), updatedPost.get("body"));
+        } finally {
+            response.dispose();
+        }
+    }
+
+    @Test(description = "TC_017 - Partially update a post with PATCH")
+    public void patchPostChangesOnlySubmittedFields() throws Exception {
+        JsonPlaceholderApiClient client =
+                new JsonPlaceholderApiClient(getApiTestContext().apiRequestContext());
+        APIResponse baselineResponse = client.getPost(1);
+        JsonNode originalPost;
+
+        try {
+            Assert.assertEquals(
+                    baselineResponse.status(), 200, "Baseline GET /posts/1 should return HTTP 200.");
+            originalPost = parseAndValidatePost(baselineResponse.text());
+        } finally {
+            baselineResponse.dispose();
+        }
+
+        Map<String, Object> changes = Map.of("title", "M7 PATCH update");
+        APIResponse response = client.patchPost(1, changes);
+
+        try {
+            Assert.assertEquals(response.status(), 200, "PATCH /posts/1 should return HTTP 200.");
+            JsonNode patchedPost = parseAndValidatePost(response.text());
+
+            Assert.assertEquals(patchedPost.path("title").asText(), changes.get("title"));
+            Assert.assertEquals(patchedPost.path("id"), originalPost.path("id"));
+            Assert.assertEquals(patchedPost.path("userId"), originalPost.path("userId"));
+            Assert.assertEquals(patchedPost.path("body"), originalPost.path("body"));
+        } finally {
+            response.dispose();
+        }
+    }
+
+    @Test(description = "TC_018 - Delete a post")
+    public void deletePostReturnsEmptyObject() throws Exception {
+        JsonPlaceholderApiClient client =
+                new JsonPlaceholderApiClient(getApiTestContext().apiRequestContext());
+        APIResponse response = client.deletePost(1);
+
+        try {
+            Assert.assertEquals(response.status(), 200, "DELETE /posts/1 should return HTTP 200.");
+            JsonNode body = OBJECT_MAPPER.readTree(response.text());
+
+            Assert.assertTrue(body.isObject(), "Delete response should be a JSON object.");
+            Assert.assertEquals(body.size(), 0, "Delete response object should be empty.");
+        } finally {
+            response.dispose();
+        }
+    }
+
+    @Test(description = "TC_019 - Request a nonexistent post")
+    public void getMissingPostReturnsNotFound() {
+        JsonPlaceholderApiClient client =
+                new JsonPlaceholderApiClient(getApiTestContext().apiRequestContext());
+        APIResponse response = client.getPost(999);
+
+        try {
+            Assert.assertEquals(response.status(), 404, "GET /posts/999 should return HTTP 404.");
+        } finally {
+            response.dispose();
+        }
+    }
+
     private JsonNode parseAndValidatePost(String responseBody) throws Exception {
         JsonNode post = OBJECT_MAPPER.readTree(responseBody);
         Schema schema;
