@@ -9,11 +9,13 @@ public final class CartPage {
     private final Page page;
     private final Locator cartItems;
     private final Locator shoppingCartBadge;
+    private final Locator checkoutButton;
 
     public CartPage(Page page) {
         this.page = page;
         this.cartItems = page.locator("[data-test='inventory-item']");
         this.shoppingCartBadge = page.locator("[data-test='shopping-cart-badge']");
+        this.checkoutButton = page.locator("[data-test='checkout']");
     }
 
     public Locator cartItems() {
@@ -29,6 +31,10 @@ public final class CartPage {
 
     public Locator shoppingCartBadge() {
         return shoppingCartBadge;
+    }
+
+    public void openCheckout() {
+        checkoutButton.click();
     }
 
     public void removeProduct(String exactProductName) {

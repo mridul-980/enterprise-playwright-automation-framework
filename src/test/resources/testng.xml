@@ -6,6 +6,7 @@
             <class name="tests.base.MavenTestNgSmokeTest"/>
             <class name="tests.ui.LoginTest"/>
             <class name="tests.ui.InventoryTest"/>
+            <class name="tests.ui.CheckoutTest"/>
         </classes>
     </test>
 </suite>
