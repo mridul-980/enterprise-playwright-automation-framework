@@ -27,7 +27,7 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         APIResponse response = client.getPost(1);
 
         try {
-            Assert.assertEquals(response.status(), 200, "GET /posts/1 should return HTTP 200.");
+            assertStatus(response, "GET", "/posts/1", 200);
             JsonNode post = parseAndValidatePost(response.text());
 
             Assert.assertEquals(post.path("id").asInt(), 1, "Post ID should be 1.");
@@ -48,7 +48,7 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         APIResponse response = client.createPost(submittedPost);
 
         try {
-            Assert.assertEquals(response.status(), 201, "POST /posts should return HTTP 201.");
+            assertStatus(response, "POST", "/posts", 201);
             JsonNode createdPost = parseAndValidatePost(response.text());
 
             Assert.assertEquals(createdPost.path("title").asText(), submittedPost.get("title"));
@@ -77,7 +77,7 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         APIResponse response = client.updatePost(1, updatedPost);
 
         try {
-            Assert.assertEquals(response.status(), 200, "PUT /posts/1 should return HTTP 200.");
+            assertStatus(response, "PUT", "/posts/1", 200);
             JsonNode post = parseAndValidatePost(response.text());
 
             Assert.assertEquals(post.path("id").asInt(), updatedPost.get("id"));
@@ -97,8 +97,7 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         JsonNode originalPost;
 
         try {
-            Assert.assertEquals(
-                    baselineResponse.status(), 200, "Baseline GET /posts/1 should return HTTP 200.");
+            assertStatus(baselineResponse, "GET", "/posts/1 (PATCH baseline)", 200);
             originalPost = parseAndValidatePost(baselineResponse.text());
         } finally {
             baselineResponse.dispose();
@@ -108,7 +107,7 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         APIResponse response = client.patchPost(1, changes);
 
         try {
-            Assert.assertEquals(response.status(), 200, "PATCH /posts/1 should return HTTP 200.");
+            assertStatus(response, "PATCH", "/posts/1", 200);
             JsonNode patchedPost = parseAndValidatePost(response.text());
 
             Assert.assertEquals(patchedPost.path("title").asText(), changes.get("title"));
@@ -127,7 +126,7 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         APIResponse response = client.deletePost(1);
 
         try {
-            Assert.assertEquals(response.status(), 200, "DELETE /posts/1 should return HTTP 200.");
+            assertStatus(response, "DELETE", "/posts/1", 200);
             JsonNode body = OBJECT_MAPPER.readTree(response.text());
 
             Assert.assertTrue(body.isObject(), "Delete response should be a JSON object.");
@@ -144,10 +143,20 @@ public final class JsonPlaceholderApiTest extends ApiBaseTest {
         APIResponse response = client.getPost(999);
 
         try {
-            Assert.assertEquals(response.status(), 404, "GET /posts/999 should return HTTP 404.");
+            assertStatus(response, "GET", "/posts/999", 404);
         } finally {
             response.dispose();
         }
+    }
+
+    private void assertStatus(
+            APIResponse response, String operation, String endpoint, int expectedStatus) {
+        int actualStatus = response.status();
+        Assert.assertEquals(
+                actualStatus,
+                expectedStatus,
+                operation + " " + endpoint + " expected HTTP " + expectedStatus
+                        + " but received HTTP " + actualStatus + ".");
     }
 
     private JsonNode parseAndValidatePost(String responseBody) throws Exception {
