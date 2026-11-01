@@ -1,0 +1,61 @@
+name: Playwright Java Tests
+
+on:
+  push:
+    branches: [feature/playwright-java-migration]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    env:
+      BROWSER: chromium
+      HEADLESS: "true"
+      BASE_URL: https://www.saucedemo.com
+      API_BASE_URL: https://jsonplaceholder.typicode.com
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Install Playwright Chromium and Linux dependencies
+        run: mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI "-Dexec.args=install --with-deps chromium"
+
+      - name: Run Maven test suite
+        run: mvn --batch-mode -Dallure.results.directory=target/allure-results test
+
+      - name: Upload Surefire reports
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/**
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload Allure results
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: allure-results
+          path: target/allure-results/**
+          retention-days: 14
+          if-no-files-found: warn
