@@ -4,7 +4,7 @@
     <listeners>
         <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
     </listeners>
-    <test name="Smoke Test">
+    <test name="Framework Regression">
         <classes>
             <class name="tests.base.MavenTestNgSmokeTest"/>
             <class name="tests.ui.LoginTest"/>

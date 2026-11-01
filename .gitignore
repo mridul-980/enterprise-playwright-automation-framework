@@ -1,6 +1,7 @@
 
 # Playwright
 node_modules/
+/target/
 /test-results/
 /playwright-report/
 /blob-report/
